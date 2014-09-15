@@ -43,8 +43,18 @@ namespace WordProcessor9000
             reader = TextFileReader.ReadFile(file);
             Console.WriteLine(reader);
 
-            String dateRegex = @"(?i:mon|tue|wed|thu|fri|sat|sun),\s\d+\s(?i:jan|feb|mar|apr|may|june|july|aug|sept|oct|nov|dev)\s(?:[12]\d{3})";
+            // This regex matches the format of the dates in the given example text file:
+            // "DAY, DATE MONTH YEAR" 
+            // Where:
+            //  DAY is the three letter abbreviation of the day
+            //  DATE is one or two digit date
+            //  MONTH is the abbreviation of the Month
+            //  YEAR is either 1xxx or 2xxx.
+            String dateRegex = @"(?i:mon|tue|wed|thu|fri|sat|sun),\s\d\d?\s(?i:jan|feb|mar|apr|may|june|july|aug|sept|oct|nov|dev)\s(?:[12]\d{3})";
 
+            // This regex matches all urls of form ... protoc
+            // Referencing http://tools.ietf.org/html/rfc3986
+            String urlRegex = @"(?i:(?i:https?|ftp)://|www)(?i:[\w+?\.\w+])+(?i:[\w\~\[\]\!\@\#\$%\^\&\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?";
 
             HighligthedConsoleWrite("This is a test of the highlighted word method", ConsoleColor.Red, ConsoleColor.Green);
             HighligthedConsoleWrite("This is another test of the highlighted word method", ConsoleColor.Green, ConsoleColor.Red);
