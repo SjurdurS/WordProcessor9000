@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace WordProcessor9000
 {
@@ -50,7 +51,7 @@ namespace WordProcessor9000
             //  DATE is one or two digit date
             //  MONTH is the abbreviation of the Month
             //  YEAR is either 1xxx or 2xxx.
-            String dateRegex = @"(?i:mon|tue|wed|thu|fri|sat|sun),\s\d\d?\s(?i:jan|feb|mar|apr|may|june|july|aug|sept|oct|nov|dev)\s(?:[12]\d{3})";
+            Regex dateRegex = new Regex(@"(?i:mon|tue|wed|thu|fri|sat|sun),\s\d\d?\s(?i:jan|feb|mar|apr|may|june|july|aug|sept|oct|nov|dev)\s(?:[12]\d{3})");
 
             // This regex matches all urls of forms:
             //  http(s) or ftp :// address
@@ -61,7 +62,8 @@ namespace WordProcessor9000
             //  http://www.feeds.reuters.com/~r/reuters/topNews/~3/ptoAzETqy3w/us-usa-neilarmstrong-idUSBRE87O0B020120825
             //  www.feeds.reuters.com/
             // Allowed characters found here: http://tools.ietf.org/html/rfc3986#appendix-A
-            String urlRegex = @"(?i:(?i:https?|ftp)://|[^w]www\.)(?i:[\w+?\.\w+])+(?i:[\w\~\!\@\#\$%\^\&\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?";
+            Regex urlRegex = new Regex(@"(?i:(?i:https?|ftp)://|[^w]www\.)(?i:[\w+?\.\w+])+(?i:[\w\~\!\@\#\$%\^\&\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?");
+
 
             HighligthedConsoleWrite("This is a test of the highlighted word method", ConsoleColor.Red, ConsoleColor.Green);
             HighligthedConsoleWrite("This is another test of the highlighted word method", ConsoleColor.Green, ConsoleColor.Red);
