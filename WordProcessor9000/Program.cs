@@ -43,7 +43,7 @@ namespace WordProcessor9000
             reader = TextFileReader.ReadFile(file);
             Console.WriteLine(reader);
 
-            
+            String dateRegex = @"(?i:mon|tue|wed|thu|fri|sat|sun),\s\d+\s(?i:jan|feb|mar|apr|may|june|july|aug|sept|oct|nov|dev)\s(?:[12]\d{3})";
 
 
             HighligthedConsoleWrite("This is a test of the highlighted word method", ConsoleColor.Red, ConsoleColor.Green);
