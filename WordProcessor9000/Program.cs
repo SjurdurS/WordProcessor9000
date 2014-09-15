@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace WordProcessor9000
 {
@@ -14,11 +14,11 @@ namespace WordProcessor9000
 
 
         /// <summary>
-        /// Writes a string to the console
+        /// Writes a string to the console with the specified background / foreground colors.
         /// </summary>
-        /// <param name="str"></param>
-        /// <param name="backgroundColor"></param>
-        /// <param name="foregroundColor"></param>
+        /// <param name="str">The string to color</param>
+        /// <param name="backgroundColor">The background color</param>
+        /// <param name="foregroundColor">The font color</param>
         private static void HighligthedConsoleWrite(String str, ConsoleColor backgroundColor, ConsoleColor foregroundColor)
         {
             ConsoleColor originalForegroundColor = Console.ForegroundColor; 
@@ -53,6 +53,14 @@ namespace WordProcessor9000
             //  YEAR is either 1xxx or 2xxx.
             Regex dateRegex = new Regex(@"(?i:mon|tue|wed|thu|fri|sat|sun),\s\d\d?\s(?i:jan|feb|mar|apr|may|june|july|aug|sept|oct|nov|dev)\s(?:[12]\d{3})");
 
+            // This is a test to see if it actually works.
+            MatchCollection dateMatches = dateRegex.Matches(reader);
+            foreach (Match match in dateMatches)
+            {
+                HighligthedConsoleWrite(match.Value, ConsoleColor.Red, ConsoleColor.Green);
+                Console.WriteLine();
+            }
+
             // This regex matches all urls of forms:
             //  http(s) or ftp :// address
             // OR
@@ -63,6 +71,14 @@ namespace WordProcessor9000
             //  www.feeds.reuters.com/
             // Allowed characters found here: http://tools.ietf.org/html/rfc3986#appendix-A
             Regex urlRegex = new Regex(@"(?i:(?i:https?|ftp)://|[^w]www\.)(?i:[\w+?\.\w+])+(?i:[\w\~\!\@\#\$%\^\&\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?");
+            
+            // This is a test to see if it actually works.
+            MatchCollection urlMatches = urlRegex.Matches(reader);
+            foreach (Match match in urlMatches)
+            {
+                HighligthedConsoleWrite(match.Value, ConsoleColor.Yellow, ConsoleColor.Blue);
+                Console.WriteLine();
+            }
 
 
             HighligthedConsoleWrite("This is a test of the highlighted word method", ConsoleColor.Red, ConsoleColor.Green);
