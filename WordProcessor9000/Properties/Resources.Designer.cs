@@ -59,5 +59,14 @@ namespace WordProcessor9000.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &gt;.
+        /// </summary>
+        internal static string InputMessage {
+            get {
+                return ResourceManager.GetString("InputMessage", resourceCulture);
+            }
+        }
     }
 }
