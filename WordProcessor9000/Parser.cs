@@ -28,9 +28,7 @@ namespace WordProcessor9000
                 Console.WriteLine("Error occured while reading input: " + ie);
             }
 
-            if (_commands.IsCommand(inputLine))
-                return new Command(inputLine);
-            return new Command(null);
+            return new Command(inputLine);
         }
     }
 }

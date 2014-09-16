@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InputMessage" xml:space="preserve">
-    <value>&gt;</value>
+    <value>&gt; </value>
     <comment>The message to be shown when waiting for user input</comment>
   </data>
 </root>

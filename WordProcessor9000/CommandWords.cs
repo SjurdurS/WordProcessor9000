@@ -6,7 +6,8 @@ namespace WordProcessor9000
     {
         private static readonly String[] ValidCommands =
         {
-            "help",
+            "open",
+            "search",
             "quit"
             
         };

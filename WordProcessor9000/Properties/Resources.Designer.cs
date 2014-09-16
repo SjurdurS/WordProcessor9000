@@ -61,7 +61,7 @@ namespace WordProcessor9000.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &gt;.
+        ///   Looks up a localized string similar to &gt; .
         /// </summary>
         internal static string InputMessage {
             get {
