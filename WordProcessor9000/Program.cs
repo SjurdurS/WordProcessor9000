@@ -67,15 +67,23 @@ namespace WordProcessor9000
         {
             String query = command.getCommandWord();
 
-            if (FileContents.Contains(query))
+            if (!Search(query))
             {
-                Console.WriteLine("This file contains this word!");
+                Console.WriteLine("No matches found. Try again.");
             }
         }
 
-        private void Search(String query)
+        private Boolean Search(String query)
         {
-            
+            Boolean foundSomething = false;
+            MatchCollection matches = Regex.Matches(FileContents, @query);
+            foreach (Match m in matches)
+            {
+                Console.WriteLine("Match found at index " + m.Index + " with ending index at " + (m.Index+m.Length));
+                foundSomething = true;
+            }
+
+            return foundSomething;
         }
 
 
