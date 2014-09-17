@@ -31,7 +31,7 @@ namespace WordProcessor9000
         {
             Console.Clear();
             Console.WriteLine("Welcome to WordProcessor9000\n");
-            Console.WriteLine("This software allows you to search for and highlight words a given text.");
+            Console.WriteLine("This software allows you to search for and highlight words in a given text.");
             Console.WriteLine("Available functionality:");
             Console.WriteLine("+".PadRight(10) + "Two adjacent keywords are followed one after the other:");
             Console.WriteLine("".PadRight(10) + "e.g. 'text + file' matches 'text file'.");
@@ -50,7 +50,9 @@ namespace WordProcessor9000
             WaitForAnyKey();
             Console.Clear();
 
-            PrintFile();
+            Search(_regexUrl, ConsoleColor.Blue, ConsoleColor.Black);
+            Search(_regexDate, ConsoleColor.Red, ConsoleColor.Black);
+            ColorPrint();
 
             while (true)
             {

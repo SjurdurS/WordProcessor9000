@@ -71,7 +71,7 @@ namespace WordProcessor9000
                         _substrings[i] = new ColoredSubstring(cs.StartIndex, startIndexNew, cs.ForegroundColor,
                             cs.BackgroundColor);
                         _substrings.Insert(i + 1, newCs);
-                        if (endIndexNew + 1 < cs.EndIndex)
+                        if (endIndexNew < cs.EndIndex)
                         {
                             _substrings.Insert(i + 2,
                                 new ColoredSubstring(endIndexNew, cs.EndIndex, cs.ForegroundColor,
