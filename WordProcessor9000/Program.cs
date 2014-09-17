@@ -23,7 +23,7 @@ namespace WordProcessor9000
             FileContents = TextFileReader.ReadFile(filepath);
             InitializeRegexes();
 
-            this._substrings = new ColoredSubstringList(new ColoredSubstring(0, FileContents.Length););
+            this._substrings = new ColoredSubstringList(new ColoredSubstring(0, FileContents.Length));
             Start();
         }
 
@@ -77,125 +77,48 @@ namespace WordProcessor9000
 
         private void ProcessCommand(Command command)
         {
+            this._substrings = new ColoredSubstringList(new ColoredSubstring(0, FileContents.Length)); // Reset the colored substring list
+
             String query = command.getCommandWord();
 
-            Dictionary<int, int> userMatches = Search(query);
-            Dictionary<int, int> urlMatches = Search(regexURL);
-            Dictionary<int, int> dateMatches = Search(regexDate);
+            
+            Search(regexURL, ConsoleColor.Blue, ConsoleColor.Black);
+            Search(regexDate, ConsoleColor.Red, ConsoleColor.Black);
+
+            Search(query, ConsoleColor.Black, ConsoleColor.Yellow);
 
             Console.ResetColor();
             Console.Clear();
 
-
-            ConsoleColor originalForegroundColor = Console.ForegroundColor;
-            ConsoleColor originalBackgroundColor = Console.BackgroundColor;
-
-            ConsoleColor lastUsedForegroundColor = originalForegroundColor;
-            ConsoleColor lastUsedBackgroundColor = originalBackgroundColor;
-
-            for (int i = 0; i < FileContents.Length; i++)
+            foreach (ColoredSubstring cs in this._substrings)
             {
-                /*
-                if (urlMatches.ContainsKey(i))
-                {
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                }
-                 
-                if (dateMatches.ContainsKey(i))
-                {
-                    lastUsedForegroundColor = Console.ForegroundColor;
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.BackgroundColor = lastUsedBackgroundColor;
-                }
-                
-                
-                if (userMatches.ContainsKey(i))
-                {
-                    lastUsedForegroundColor = Console.ForegroundColor;
-                    lastUsedBackgroundColor = Console.BackgroundColor;
-                    Console.BackgroundColor = ConsoleColor.Yellow;
-                    Console.ForegroundColor = ConsoleColor.Black;
-                }
-
-
-                if (userMatches.ContainsValue(i))
-                {
-                    Console.ForegroundColor = lastUsedForegroundColor;
-                    Console.BackgroundColor = lastUsedBackgroundColor;
-                }
-
-                else if (dateMatches.ContainsValue(i))
-                {
-                    Console.ForegroundColor = lastUsedForegroundColor;
-                    Console.BackgroundColor = lastUsedBackgroundColor;
-                }
-
-                else if (urlMatches.ContainsValue(i))
-                {
-
-                    Console.ResetColor();
-                    originalForegroundColor = Console.ForegroundColor;
-                    originalBackgroundColor = Console.BackgroundColor;
-                }
-                 */
-
-                if (urlMatches.ContainsKey(i))
-                {
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.BackgroundColor = lastUsedBackgroundColor;
-                }
-
-                if (urlMatches.ContainsValue(i))
-                {
-
-                    Console.ResetColor();
-                    originalForegroundColor = Console.ForegroundColor;
-                    originalBackgroundColor = Console.BackgroundColor;
-                }
-
-                if (userMatches.ContainsKey(i))
-                {
-                    lastUsedForegroundColor = Console.ForegroundColor;
-                    lastUsedBackgroundColor = Console.BackgroundColor;
-                    Console.BackgroundColor = ConsoleColor.Yellow;
-                    Console.ForegroundColor = ConsoleColor.Black;
-                }
-
-
-                if (userMatches.ContainsValue(i))
-                {
-                    Console.ForegroundColor = lastUsedForegroundColor;
-                    Console.BackgroundColor = lastUsedBackgroundColor;
-                }
-                
-                Console.Write(FileContents[i]);
+                string substring = FileContents.Substring(cs.StartIndex, cs.EndIndex - cs.StartIndex);
+                ColoredConsoleWrite(substring, cs.BackgroundColor, cs.ForegroundColor);
             }
+
+
 
             Console.ResetColor();
         }
 
-        private Dictionary<int, int> Search(String query)
+        private void Search(String query, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
-            var indices = new Dictionary<int, int>();
             MatchCollection matches = Regex.Matches(FileContents, query);
             foreach (Match m in matches)
             {
-                indices.Add(m.Index, (m.Index + m.Length));
+                var cs = new ColoredSubstring(m.Index, m.Index+m.Length, foregroundColor, backgroundColor);
+                this._substrings.Add(cs);
             }
-
-            return indices;
         }
 
-        private Dictionary<int, int> Search(Regex regex)
+        private void Search(Regex regex, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
-            var indices = new Dictionary<int, int>();
             MatchCollection matches = regex.Matches(FileContents);
             foreach (Match m in matches)
             {
-                indices.Add(m.Index, (m.Index + m.Length));
+                var cs = new ColoredSubstring(m.Index, m.Index + m.Length, foregroundColor, backgroundColor);
+                this._substrings.Add(cs);
             }
-
-            return indices;
         }
 
 
@@ -204,7 +127,7 @@ namespace WordProcessor9000
         /// </summary>
         /// <param name="str">The string to color</param>
         /// <param name="color">The font color</param>
-        private static void ColouredConsoleWrite(String str, ConsoleColor color)
+        private static void ColoredConsoleWrite(String str, ConsoleColor color)
         {
             ConsoleColor originalColor = Console.ForegroundColor;
             Console.ForegroundColor = color;
@@ -218,7 +141,7 @@ namespace WordProcessor9000
         /// <param name="str">The string to color</param>
         /// <param name="backgroundColor">The background color</param>
         /// <param name="foregroundColor">The font color</param>
-        private static void ColouredConsoleWrite(String str, ConsoleColor backgroundColor, ConsoleColor foregroundColor)
+        private static void ColoredConsoleWrite(String str, ConsoleColor backgroundColor, ConsoleColor foregroundColor)
         {
             ConsoleColor originalForegroundColor = Console.ForegroundColor;
             ConsoleColor originalBackgroundColor = Console.BackgroundColor;

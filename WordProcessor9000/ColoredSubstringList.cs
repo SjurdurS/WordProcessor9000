@@ -1,67 +1,65 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace WordProcessor9000
 {
-    internal class ColoredSubstringList
+    internal class ColoredSubstringList : IEnumerable<ColoredSubstring>
     {
-        private readonly List<ColoredSubstring> substrings;
+        private readonly List<ColoredSubstring> _substrings;
 
         public ColoredSubstringList(ColoredSubstring cs)
         {
-            substrings = new List<ColoredSubstring>();
-            substrings.Add(cs);
+            _substrings = new List<ColoredSubstring>();
+            _substrings.Add(cs);
         }
 
-        public void add(ColoredSubstring newCs)
+        public void Add(ColoredSubstring newCs)
         {
-            Console.WriteLine("");
-            Console.WriteLine("Inserting new CS: ");
-            newCs.PrintMe();
             int startIndexNew = newCs.StartIndex;
             int endIndexNew = newCs.EndIndex;
 
             int i = 0;
             int j = 0;
 
-            for (i = 0; i < substrings.Count; i++)
+            for (i = 0; i < _substrings.Count; i++)
             {
-                ColoredSubstring cs = substrings[i];
+                ColoredSubstring cs = _substrings[i];
 
                 // Case 1.a start index is equal another. 
                 if (startIndexNew == cs.StartIndex)
                 {
                     if (endIndexNew < cs.EndIndex)
                     {
-                        substrings[i] = new ColoredSubstring(endIndexNew, cs.EndIndex, cs.ForegroundColor,
+                        _substrings[i] = new ColoredSubstring(endIndexNew, cs.EndIndex, cs.ForegroundColor,
                             cs.BackgroundColor);
-                        substrings.Insert(i, newCs);
+                        _substrings.Insert(i, newCs);
                     } // Replace substring if end indices are equal
                     else if (endIndexNew == cs.EndIndex)
                     {
-                        substrings[i] = newCs;
+                        _substrings[i] = newCs;
                     }
                     else
                     {
                         // endIndexNew > cs.EndIndex
-                        for (j = i + 1; j < substrings.Count; j++)
+                        for (j = i + 1; j < _substrings.Count; j++)
                         {
-                            ColoredSubstring cs2 = substrings[j];
+                            ColoredSubstring cs2 = _substrings[j];
                             if (endIndexNew == cs2.EndIndex)
                             {
-                                substrings[i] = newCs;
-                                substrings.Remove(cs2);
+                                _substrings[i] = newCs;
+                                _substrings.Remove(cs2);
                                 break;
                             }
                             if (endIndexNew < cs2.EndIndex)
                             {
-                                substrings.Insert(i, newCs);
-                                substrings[j] = new ColoredSubstring(endIndexNew, cs2.EndIndex, cs2.ForegroundColor,
+                                _substrings.Insert(i, newCs);
+                                _substrings[j] = new ColoredSubstring(endIndexNew, cs2.EndIndex, cs2.ForegroundColor,
                                     cs2.BackgroundColor);
-                                substrings.Remove(cs2);
+                                _substrings.Remove(cs2);
                                 break;
                             } // endIndexNew > cs2.EndIndex
-                            substrings.RemoveAt(j);
+                            _substrings.RemoveAt(j);
                             j--;
                         }
                     }
@@ -70,12 +68,12 @@ namespace WordProcessor9000
                 {
                     if (endIndexNew <= cs.EndIndex)
                     {
-                        substrings[i] = new ColoredSubstring(cs.StartIndex, startIndexNew, cs.ForegroundColor,
+                        _substrings[i] = new ColoredSubstring(cs.StartIndex, startIndexNew, cs.ForegroundColor,
                             cs.BackgroundColor);
-                        substrings.Insert(i + 1, newCs);
+                        _substrings.Insert(i + 1, newCs);
                         if (endIndexNew + 1 < cs.EndIndex)
                         {
-                            substrings.Insert(i + 2,
+                            _substrings.Insert(i + 2,
                                 new ColoredSubstring(endIndexNew, cs.EndIndex, cs.ForegroundColor,
                                     cs.BackgroundColor));
                         }
@@ -83,19 +81,19 @@ namespace WordProcessor9000
                     else
                     {
                         // if endIndexNew > cs.EndIndex
-                        for (j = i + 1; j < substrings.Count; j++)
+                        for (j = i + 1; j < _substrings.Count; j++)
                         {
-                            ColoredSubstring cs2 = substrings[j];
+                            ColoredSubstring cs2 = _substrings[j];
                             if (endIndexNew < cs2.EndIndex)
                             {
-                                substrings[i] = new ColoredSubstring(cs.StartIndex, startIndexNew,
+                                _substrings[i] = new ColoredSubstring(cs.StartIndex, startIndexNew,
                                     cs.ForegroundColor, cs.BackgroundColor);
-                                substrings.Insert(i + 1, newCs);
-                                substrings[j + 1] = new ColoredSubstring(endIndexNew, cs2.EndIndex,
+                                _substrings.Insert(i + 1, newCs);
+                                _substrings[j + 1] = new ColoredSubstring(endIndexNew, cs2.EndIndex,
                                     cs2.ForegroundColor, cs2.BackgroundColor);
                                 break;
                             }
-                            substrings.RemoveAt(j);
+                            _substrings.RemoveAt(j);
                             j--;
                         }
                     }
@@ -103,11 +101,11 @@ namespace WordProcessor9000
             }
         }
 
-        public void printArray()
+        public void PrintArray()
         {
             Console.WriteLine("");
             Console.WriteLine("---------- Print ------------");
-            foreach (ColoredSubstring cs in substrings)
+            foreach (ColoredSubstring cs in _substrings)
             {
                 cs.PrintMe();
             }
@@ -115,5 +113,20 @@ namespace WordProcessor9000
             Console.WriteLine("-----------------------------");
         }
 
+
+        // Taken from here http://stackoverflow.com/questions/13135443/how-to-make-the-class-as-an-ienumerable-in-c
+        #region Implementation of IEnumerable
+
+        public IEnumerator<ColoredSubstring> GetEnumerator()
+        {
+            return _substrings.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #endregion
     }
 }
