@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Text.RegularExpressions;
 
 namespace WordProcessor9000
@@ -8,10 +10,16 @@ namespace WordProcessor9000
         private readonly Parser parser;
         public String FileContents;
 
+        private Regex regexDate;
+        private Regex regexURL;
+
+
         public Program(String filepath)
         {
             parser = new Parser();
             FileContents = TextFileReader.ReadFile(filepath);
+            InitializeRegexes();
+
             Start();
         }
 
@@ -67,23 +75,126 @@ namespace WordProcessor9000
         {
             String query = command.getCommandWord();
 
-            if (!Search(query))
+            Dictionary<int, int> userMatches = Search(query);
+            Dictionary<int, int> urlMatches = Search(regexURL);
+            Dictionary<int, int> dateMatches = Search(regexDate);
+
+            Console.ResetColor();
+            Console.Clear();
+
+
+            ConsoleColor originalForegroundColor = Console.ForegroundColor;
+            ConsoleColor originalBackgroundColor = Console.BackgroundColor;
+
+            ConsoleColor lastUsedForegroundColor = originalForegroundColor;
+            ConsoleColor lastUsedBackgroundColor = originalBackgroundColor;
+
+            for (int i = 0; i < FileContents.Length; i++)
             {
-                Console.WriteLine("No matches found. Try again.");
+                /*
+                if (urlMatches.ContainsKey(i))
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                }
+                 
+                if (dateMatches.ContainsKey(i))
+                {
+                    lastUsedForegroundColor = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.BackgroundColor = lastUsedBackgroundColor;
+                }
+                
+                
+                if (userMatches.ContainsKey(i))
+                {
+                    lastUsedForegroundColor = Console.ForegroundColor;
+                    lastUsedBackgroundColor = Console.BackgroundColor;
+                    Console.BackgroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                }
+
+
+                if (userMatches.ContainsValue(i))
+                {
+                    Console.ForegroundColor = lastUsedForegroundColor;
+                    Console.BackgroundColor = lastUsedBackgroundColor;
+                }
+
+                else if (dateMatches.ContainsValue(i))
+                {
+                    Console.ForegroundColor = lastUsedForegroundColor;
+                    Console.BackgroundColor = lastUsedBackgroundColor;
+                }
+
+                else if (urlMatches.ContainsValue(i))
+                {
+
+                    Console.ResetColor();
+                    originalForegroundColor = Console.ForegroundColor;
+                    originalBackgroundColor = Console.BackgroundColor;
+                }
+                 */
+
+                if (urlMatches.ContainsKey(i))
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.BackgroundColor = lastUsedBackgroundColor;
+                }
+
+                if (urlMatches.ContainsValue(i))
+                {
+
+                    Console.ResetColor();
+                    originalForegroundColor = Console.ForegroundColor;
+                    originalBackgroundColor = Console.BackgroundColor;
+                }
+
+                if (userMatches.ContainsKey(i))
+                {
+                    lastUsedForegroundColor = Console.ForegroundColor;
+                    lastUsedBackgroundColor = Console.BackgroundColor;
+                    Console.BackgroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                }
+
+
+                if (userMatches.ContainsValue(i))
+                {
+                    Console.ForegroundColor = lastUsedForegroundColor;
+                    Console.BackgroundColor = lastUsedBackgroundColor;
+                }
+
+
+
+
+                Console.Write(FileContents[i]);
             }
+
+            Console.ResetColor();
         }
 
-        private Boolean Search(String query)
+        private Dictionary<int, int> Search(String query)
         {
-            Boolean foundSomething = false;
-            MatchCollection matches = Regex.Matches(FileContents, @query);
+            var indices = new Dictionary<int, int>();
+            MatchCollection matches = Regex.Matches(FileContents, query);
             foreach (Match m in matches)
             {
-                Console.WriteLine("Match found at index " + m.Index + " with ending index at " + (m.Index+m.Length));
-                foundSomething = true;
+                indices.Add(m.Index, (m.Index + m.Length));
             }
 
-            return foundSomething;
+            return indices;
+        }
+
+        private Dictionary<int, int> Search(Regex regex)
+        {
+            var indices = new Dictionary<int, int>();
+            MatchCollection matches = regex.Matches(FileContents);
+            foreach (Match m in matches)
+            {
+                indices.Add(m.Index, (m.Index + m.Length));
+            }
+
+            return indices;
         }
 
 
@@ -117,7 +228,7 @@ namespace WordProcessor9000
             Console.ForegroundColor = originalForegroundColor;
         }
 
-        private void regexes()
+        private void InitializeRegexes()
         {
             // This regex matches the format of the dates in the given example text file:
             // "DDD, dd MMM(M) YYYY" 
@@ -126,7 +237,7 @@ namespace WordProcessor9000
             //  dd is one or two digit date
             //  MMM(M) is the abbreviation of the Month
             //  YYYY is either 1xxx or 2xxx.
-            var dateRegex =
+            regexDate =
                 new Regex(
                     @"(?i:mon|tue|wed|thu|fri|sat|sun),\s\d\d?\s(?i:jan|feb|mar|apr|may|june|july|aug|sept|oct|nov|dec)\s(?:[12]\d{3})");
 
@@ -140,9 +251,9 @@ namespace WordProcessor9000
             //  http://www.feeds.reuters.com/~r/reuters/topNews/~3/ptoAzETqy3w/us-usa-neilarmstrong-idUSBRE87O0B020120825
             //  www.feeds.reuters.com/
             // Allowed characters found here: http://tools.ietf.org/html/rfc3986#appendix-A
-            var urlRegex =
+            regexURL =
                 new Regex(
-                    @"(?i:(?i:https?|ftp)://|[^w]www\.)(?i:[\w+?\.\w+])+(?i:[\w\~\!\@\#\$%\^\&\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?");
+                    @"(?i:https?|ftp)://(?i:[\w+?\.\w+])+(?i:[\w\~\!\@\#\$%\^\&\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?");
         }
 
 
