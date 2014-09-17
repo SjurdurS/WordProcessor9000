@@ -41,7 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColouredSubstring.cs" />
+    <Compile Include="ColoredSubstringList.cs" />
+    <Compile Include="ColoredSubstring.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandWords.cs" />
     <Compile Include="Parser.cs" />

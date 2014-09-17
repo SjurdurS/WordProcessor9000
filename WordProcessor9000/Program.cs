@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace WordProcessor9000
@@ -13,6 +14,8 @@ namespace WordProcessor9000
         private Regex regexDate;
         private Regex regexURL;
 
+        private ColoredSubstringList _substrings;
+
 
         public Program(String filepath)
         {
@@ -20,6 +23,7 @@ namespace WordProcessor9000
             FileContents = TextFileReader.ReadFile(filepath);
             InitializeRegexes();
 
+            this._substrings = new ColoredSubstringList(new ColoredSubstring(0, FileContents.Length););
             Start();
         }
 
@@ -163,10 +167,7 @@ namespace WordProcessor9000
                     Console.ForegroundColor = lastUsedForegroundColor;
                     Console.BackgroundColor = lastUsedBackgroundColor;
                 }
-
-
-
-
+                
                 Console.Write(FileContents[i]);
             }
 
