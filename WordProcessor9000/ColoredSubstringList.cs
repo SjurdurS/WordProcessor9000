@@ -114,7 +114,8 @@ namespace WordProcessor9000
         }
 
 
-        // Taken from here http://stackoverflow.com/questions/13135443/how-to-make-the-class-as-an-ienumerable-in-c
+        // The implenentation of IEnumerable is borrowed from here:
+        // http://stackoverflow.com/questions/13135443/how-to-make-the-class-as-an-ienumerable-in-c
         #region Implementation of IEnumerable
 
         public IEnumerator<ColoredSubstring> GetEnumerator()
@@ -128,5 +129,7 @@ namespace WordProcessor9000
         }
 
         #endregion
+
+        
     }
 }

@@ -8,18 +8,18 @@ namespace WordProcessor9000
 {
     internal class Program
     {
-        private readonly Parser parser;
+        private readonly Parser _parser;
         public String FileContents;
 
-        private Regex regexDate;
-        private Regex regexURL;
+        private Regex _regexDate;
+        private Regex _regexUrl;
 
         private ColoredSubstringList _substrings;
 
 
         public Program(String filepath)
         {
-            parser = new Parser();
+            _parser = new Parser();
             FileContents = TextFileReader.ReadFile(filepath);
             InitializeRegexes();
 
@@ -54,7 +54,7 @@ namespace WordProcessor9000
 
             while (true)
             {
-                Command command = parser.GetCommand();
+                Command command = _parser.GetCommand();
                 ProcessCommand(command);
             }
         }
@@ -82,23 +82,26 @@ namespace WordProcessor9000
             String query = command.getCommandWord();
 
             
-            Search(regexURL, ConsoleColor.Blue, ConsoleColor.Black);
-            Search(regexDate, ConsoleColor.Red, ConsoleColor.Black);
+            Search(_regexUrl, ConsoleColor.Blue, ConsoleColor.Black);
+            Search(_regexDate, ConsoleColor.Red, ConsoleColor.Black);
 
             Search(query, ConsoleColor.Black, ConsoleColor.Yellow);
 
             Console.ResetColor();
             Console.Clear();
 
+            ColorPrint();
+
+            Console.ResetColor();
+        }
+
+        private void ColorPrint()
+        {
             foreach (ColoredSubstring cs in this._substrings)
             {
                 string substring = FileContents.Substring(cs.StartIndex, cs.EndIndex - cs.StartIndex);
                 ColoredConsoleWrite(substring, cs.BackgroundColor, cs.ForegroundColor);
             }
-
-
-
-            Console.ResetColor();
         }
 
         private void Search(String query, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
@@ -161,7 +164,7 @@ namespace WordProcessor9000
             //  dd is one or two digit date
             //  MMM(M) is the abbreviation of the Month
             //  YYYY is either 1xxx or 2xxx.
-            regexDate =
+            _regexDate =
                 new Regex(
                     @"(?i:mon|tue|wed|thu|fri|sat|sun),\s\d\d?\s(?i:jan|feb|mar|apr|may|june|july|aug|sept|oct|nov|dec)\s(?:[12]\d{3})");
 
@@ -175,7 +178,7 @@ namespace WordProcessor9000
             //  http://www.feeds.reuters.com/~r/reuters/topNews/~3/ptoAzETqy3w/us-usa-neilarmstrong-idUSBRE87O0B020120825
             //  www.feeds.reuters.com/
             // Allowed characters found here: http://tools.ietf.org/html/rfc3986#appendix-A
-            regexURL =
+            _regexUrl =
                 new Regex(
                     @"(?i:https?|ftp)://(?i:[\w+?\.\w+])+(?i:[\w\~\!\@\#\$%\^\&\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?");
         }
