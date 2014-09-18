@@ -1,0 +1,243 @@
+\include{preamble}
+
+\begin{document}
+
+\part*{Requirements Analysis Document}
+
+
+\chapter*{Introduction}
+
+\section*{Purpose of the system}
+
+\section*{Scope of the system}
+
+\section*{Objectives and success criteria of the project}
+
+
+%\section*{Definitions, acronyms, and abbreviations}
+
+%\section*{References}
+
+%\section*{Overview}
+
+
+%\chapter*{Current system}
+
+
+\chapter*{Proposed system}
+
+\section*{Functional requirements}
+
+\subsection*{Calender}
+The Calendar is used to keep track of events, e.g. Work calendar or Holiday calendar. The Calendar contains events specific to only itself.
+A new calendar is initiated by the Client with a name that described the calendar. The Calendar can be modified by the Client.
+ A Calendar may contain one or more events. The system can contain multiple calendars.
+
+\subsection*{Event}
+An Event has a start date and an end date.
+An Event belongs to a Calendar. Events are initiated by the Client and can also be modified by the Client.
+An Event may repeat on multiple dates, e.g. every week/month.
+Events have alarms that be set to notify the user
+
+\subsection*{Client}
+The Client manages both the Calendars and the Events.
+The Client has access to all of his Calendars and Events and can therefore create, edit, share and delete Calendars and Events.
+The Client can change the view.
+The Client has the ability to Hide/Show different Calendars of their liking.
+The Client can synchronize the Calendars with the Server to they are easily accessible on different devices.
+The Client has the opportunity to search for specific events.
+
+\subsection*{Server}
+The Server is responsible for keeping the Client’s calendars up to date.
+When an Event or Calendar is shared the Server must send an invitation to the recipient(s).
+
+\subsection*{Other user}
+The Other User receives invitations from the Client and can choose to either accept or decline the invitation.
+
+\subsection*{View}
+The are four types of view: Day View, Week View, Month View, Year View.
+Besides the view can show one or more Calendars at the same time.
+
+\pagebreak
+\section*{Nonfunctional requirements}
+
+\subsection*{Usability}
+\begin{itemize}
+	\item The user should have basic experience using computers.
+	\item The user should be familiar with popular OS interfaces, e.g. Windows 7 or 8.
+	\item The user should be able to use the system without little or no documentation.
+\end{itemize}
+
+
+\subsection*{Reliability}
+\begin{itemize}
+	\item It is important that the Calendars are synchronized.
+	\item Restarting of the system is acceptable in the event of a failure.
+	\item The system may lost at most five of the last changes made by the user in the event of failure.
+\end{itemize}
+
+\subsection*{Performance}
+\begin{itemize}
+	\item The system should be responsive. There should be little to no latency during actions.
+	\item Server synchronization should take no longer than 1-2 minutes on an average home internet connection.
+	\item The system should support different user accounts on a computer.
+\end{itemize}
+
+\subsection*{Supportability}
+\begin{itemize}
+	\item Extensions could be the support of other types of Calendar systems, such as GMail, Yahoo Mail etc
+\end{itemize}
+
+\subsection*{Implementation}
+\begin{itemize}
+	\item Internet connection is needed for synchronizing with the server. If no internet connection is available the data is only stored locally.
+\end{itemize}
+
+\subsection*{Interface}
+\begin{itemize}
+	\item The data is saved locally and on the server.
+\end{itemize}
+
+\subsection*{Operation}
+\begin{itemize}
+	\item The user manages the system.
+\end{itemize}
+
+\subsection*{Package}
+\begin{itemize}
+	\item The system is installed by the user.
+\end{itemize}
+
+\pagebreak
+\section*{System models}
+
+\subsection*{Scenarios}
+
+1: 
+Nicolai just got an offer for a new job and wants to delete his old work calendar and replace it with a new one. Nicolai opens his calendar system and selects his old work calendar. He then searches for events he wants to transfer to his new calendar. He finds two events in the old work calendar he wants to transfer to his new calendar. Nicolai then creates a new calendar and creates his first event. While creating his second event, he gets a message saying his job offer is rejected. Luckily Nicolai didn’t quit his old job, so he decides to synchronize his calendar to see if the old one is still on the server.
+
+2:
+Peter has a bad day. Just as he is editing his calendar the lightning strikes down in the tree in the backyard and the power goes down and the computer crashes. Peter tries to reboot the computer but the computer will not start. Peter concludes the smoke from the hardware means his computer is now broken. The following week Peter gets himself a new computer. Peter installs the calendar system again and is annoyed that all his calendars are lost. But then Peter remembers that the calendars are stored on the server and that the calendars are not lost.
+Peter synchronizes his calendar system with the server and all his calendars are restored.
+
+\pagebreak
+
+\subsection*{Use case model}
+
+\subsubsection{Use case diagrams}
+
+//Billede
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=160mm]{usecase.png}
+\caption{UML Use Case Diagram \label{overflow}}
+\end{figure}
+
+\pagebreak
+
+\subsubsection{Use case tabels}
+
+\begin{usecase}
+
+\addtitle{Use case name}{Create a repeating event } 
+
+\addfield{Participating Actors:}{Initiated by Client \newline Communicates with Server}
+
+\addscenario{Flow of events:}{
+	\item The CLIENT creates a new event
+	\item The CLIENT Fills out event form
+	\item The CLIENT Clicks repeat
+	\item The CLIENT Selects interval
+	\item The CLIENT Saves Event. \newline - SERVER Synchronizes calendar
+}
+
+\additemizedfield{Entry conditions:}{
+	\item Calendar must exist in the CLIENT’s user profile
+}
+
+\additemizedfield{Exit conditions:}{
+	\item Event must have been saved by the CLIENT
+	\item Calendar must be synchronized with the SERVER
+}
+
+\caption{Use case tabel 1 \label{overflow}}
+\end{usecase}
+
+\pagebreak
+
+\begin{usecase}
+
+\addtitle{Use case name}{Share an existing event with another user} 
+
+\addfield{Participating Actors:}{Initiated by Client \newline Communicates with Server and Other_User}
+
+\addscenario{Flow of events:}{
+	\item The CLIENT chooses an event.
+	\item The CLIENT clicks Edit Event button
+	\item The CLIENT clicks on the SHARE button.
+	\item The CLIENT enters the username or email of another user he would like to share his event with.
+	\item The CLIENT clicks the SEND button.
+	\newline - The SERVER sends an invitation to the OTHER_USER.
+	\newline - The SERVER sends a notification “Event shared” to the CLIENT.
+	\item The CLIENT reads the notification from the SERVER.
+	\item The CLIENT closes the notification.
+}
+
+\additemizedfield{Entry conditions:}{
+	\item The CLIENT must have an existing event.
+	\item The CLIENT must be connected to the internet.
+	\item The CLIENT must know the email or username of the recipient. 
+
+}
+
+\additemizedfield{Exit conditions:}{
+	\item The OTHER_USER must have received the invitation. 
+}
+\caption{Use case tabel 2 \label{overflow}}
+\end{usecase}
+
+\pagebreak
+
+\begin{usecase}
+
+\addtitle{Use case name}{Set two reminders on an existing event} 
+
+\addfield{Participating Actors:}{Initiated by Client \newline Communicates with Server}
+
+\addscenario{Flow of events:}{
+	\item The CLIENT chooses an event
+	\item The CLIENT clicks Edit Event button
+	\item The CLIENT clicks Set Reminder
+	\item The CLIENT selects two reminders
+	\item The CLIENT sets the time when the reminder should notify the client
+	\item The CLIENT chooses Reminder Type ‘Email’ for reminder 1 and   Reminder Type ‘Notification’ for reminder 2
+	\item The CLIENT saves the event
+	\item The SERVER sends an email to the CLIENT when the first reminder is fired
+	\item The SERVER notifies the CLIENT when the second reminder is fired
+
+}
+
+\additemizedfield{Entry conditions:}{
+	\item The CLIENT must have a calendar with a future existing event
+	\item The CLIENT must have a live connection to the internet
+
+}
+
+\additemizedfield{Exit conditions:}{
+	\item The CLIENT must be able to add reminders to an event
+}
+\caption{Use case tabel 3 \label{overflow}}
+\end{usecase}
+
+
+
+%\subsection*{Object model}
+
+%\subsection*{Dynamic model}
+
+%\subsection*{User interface - navigational paths and screen mock-ups}
+
+
+%\chapter*{Glossary}
+
+\end{document}
