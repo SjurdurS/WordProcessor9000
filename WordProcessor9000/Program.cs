@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace WordProcessor9000
@@ -12,6 +9,8 @@ namespace WordProcessor9000
         public String FileContents;
 
         private Regex _regexDate;
+        private Regex _regexEndsWith;
+        private Regex _regexStartsWith;
         private Regex _regexUrl;
 
         private ColoredSubstringList _substrings;
@@ -23,7 +22,7 @@ namespace WordProcessor9000
             FileContents = TextFileReader.ReadFile(filepath);
             InitializeRegexes();
 
-            this._substrings = new ColoredSubstringList(new ColoredSubstring(0, FileContents.Length));
+            _substrings = new ColoredSubstringList(new ColoredSubstring(0, FileContents.Length));
             Start();
         }
 
@@ -64,7 +63,8 @@ namespace WordProcessor9000
 
         private void ResetSubstrings()
         {
-            this._substrings = new ColoredSubstringList(new ColoredSubstring(0, FileContents.Length)); // Reset the colored substring list
+            _substrings = new ColoredSubstringList(new ColoredSubstring(0, FileContents.Length));
+                // Reset the colored substring list
             Search(_regexUrl, ConsoleColor.Blue, ConsoleColor.Black);
             Search(_regexDate, ConsoleColor.Red, ConsoleColor.Black);
         }
@@ -77,20 +77,20 @@ namespace WordProcessor9000
                 Console.Clear();
                 ColorPrint();
             }
-            else if (query.Contains("+") && query.Length > 1)
+
+            // Words that start with the query
+            string subStart = @"\b$1\w*\b";
+            query = Regex.Replace(query, _regexStartsWith.ToString(), subStart);
+            
+
+            // Words that end with the query
+            string subEnd = @"\b\w*$1\b";
+            query = Regex.Replace(query, _regexEndsWith.ToString(), subEnd);
+
+            if (query.Contains("+") && query.Length > 1)
             {
                 query = query.Replace("+", @"\s");
             }
-            else if (Regex.Match(query, @"\w\*\b").Success)
-            {
-                Console.WriteLine("FOund you");
-                query = query.Replace("*", @"");
-            }
-            else
-            {
-                query = Regex.Escape(query);
-            }
-
 
             Search(query, ConsoleColor.Black, ConsoleColor.Yellow);
 
@@ -101,7 +101,7 @@ namespace WordProcessor9000
 
         private void ColorPrint()
         {
-            foreach (ColoredSubstring cs in this._substrings)
+            foreach (ColoredSubstring cs in _substrings)
             {
                 string substring = FileContents.Substring(cs.StartIndex, cs.EndIndex - cs.StartIndex);
                 ColoredConsoleWrite(substring, cs.BackgroundColor, cs.ForegroundColor);
@@ -109,47 +109,60 @@ namespace WordProcessor9000
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="query"></param>
         /// <param name="foregroundColor"></param>
         /// <param name="backgroundColor"></param>
         private void Search(String query, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
-            MatchCollection matches = Regex.Matches(FileContents, query);
-            int startIndex;
-            int endIndex;
-            foreach (Match m in matches)
+            try
             {
-                startIndex = m.Index;
-                endIndex = m.Index + m.Length;
-                if (endIndex > startIndex) {
-                    var cs = new ColoredSubstring(m.Index, m.Index+m.Length, foregroundColor, backgroundColor);
-                    this._substrings.Add(cs);
+                MatchCollection matches = Regex.Matches(FileContents, query);
+                int startIndex;
+                int endIndex;
+                foreach (Match m in matches)
+                {
+                    startIndex = m.Index;
+                    endIndex = m.Index + m.Length;
+                    if (endIndex > startIndex)
+                    {
+                        var cs = new ColoredSubstring(m.Index, m.Index + m.Length, foregroundColor, backgroundColor);
+                        _substrings.Add(cs);
+                    }
                 }
+            }
+            catch (ArgumentException ex)
+            {
+                // Do nothing
             }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="regex"></param>
         /// <param name="foregroundColor"></param>
         /// <param name="backgroundColor"></param>
         private void Search(Regex regex, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
-            MatchCollection matches = regex.Matches(FileContents);
-            int startIndex;
-            int endIndex;
-            foreach (Match m in matches)
+            try
             {
-                startIndex = m.Index;
-                endIndex = m.Index + m.Length;
-                if (endIndex > startIndex)
+                MatchCollection matches = regex.Matches(FileContents);
+                int startIndex;
+                int endIndex;
+                foreach (Match m in matches)
                 {
-                    var cs = new ColoredSubstring(m.Index, m.Index + m.Length, foregroundColor, backgroundColor);
-                    this._substrings.Add(cs);
+                    startIndex = m.Index;
+                    endIndex = m.Index + m.Length;
+                    if (endIndex > startIndex)
+                    {
+                        var cs = new ColoredSubstring(m.Index, m.Index + m.Length, foregroundColor, backgroundColor);
+                        _substrings.Add(cs);
+                    }
                 }
+            }
+            catch (ArgumentException ex)
+            {
+                // Do nothing
             }
         }
 
@@ -198,18 +211,19 @@ namespace WordProcessor9000
                     @"(?i:mon|tue|wed|thu|fri|sat|sun),\s\d\d?\s(?i:jan|feb|mar|apr|may|june|july|aug|sept|oct|nov|dec)\s(?:[12]\d{3})");
 
 
-            // This regex matches all urls of forms:
+            // This regex matches all urls of form:
             //  http(s) or ftp :// address
-            // OR
-            //  www. address
             // High ASCII characters are also supported. Live example is "www.strøm.dk".
-            // Examples:
+            // Example:
             //  http://www.feeds.reuters.com/~r/reuters/topNews/~3/ptoAzETqy3w/us-usa-neilarmstrong-idUSBRE87O0B020120825
-            //  www.feeds.reuters.com/
             // Allowed characters found here: http://tools.ietf.org/html/rfc3986#appendix-A
             _regexUrl =
                 new Regex(
                     @"(?i:https?|ftp)://(?i:[\w+?\.\w+])+(?i:[\w\~\!\@\#\$%\^\&\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?");
+
+
+            _regexStartsWith = new Regex(@"(\b\w*)\*");
+            _regexEndsWith = new Regex(@"\*(\w*\b)");
         }
 
 
