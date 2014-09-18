@@ -6,7 +6,7 @@ namespace WordProcessor9000
     internal class Program
     {
         private readonly Parser _parser;
-        public String FileContents;
+        private readonly String _fileContents;
 
         /// <summary>
         /// List containing indices over substrings in the FileContents string and what color each should be drawn with.
@@ -20,9 +20,9 @@ namespace WordProcessor9000
         public Program(String filepath)
         {
             _parser = new Parser();
-            FileContents = TextFileReader.ReadFile(filepath);
+            _fileContents = TextFileReader.ReadFile(filepath);
 
-            _substrings = new ColoredSubstringList(new ColoredSubstring(0, FileContents.Length));
+            _substrings = new ColoredSubstringList(new ColoredSubstring(0, _fileContents.Length));
             Start();
         }
 
@@ -65,7 +65,7 @@ namespace WordProcessor9000
 
         private void ResetSubstrings()
         {
-            _substrings = new ColoredSubstringList(new ColoredSubstring(0, FileContents.Length));
+            _substrings = new ColoredSubstringList(new ColoredSubstring(0, _fileContents.Length));
                 // Reset the colored substring list
             Search(CompiledRegexes.URL, ConsoleColor.Blue, ConsoleColor.Black);
             Search(CompiledRegexes.Date, ConsoleColor.Red, ConsoleColor.Black);
@@ -121,21 +121,22 @@ namespace WordProcessor9000
         {
             foreach (ColoredSubstring cs in _substrings)
             {
-                string substring = FileContents.Substring(cs.StartIndex, cs.EndIndex - cs.StartIndex);
+                string substring = _fileContents.Substring(cs.StartIndex, cs.EndIndex - cs.StartIndex);
                 ColoredConsoleWrite(substring, cs.BackgroundColor, cs.ForegroundColor);
             }
         }
 
         /// <summary>
+        ///     Search the contents of the file.
         /// </summary>
-        /// <param name="query"></param>
-        /// <param name="foregroundColor"></param>
-        /// <param name="backgroundColor"></param>
+        /// <param name="query">The string to search for.</param>
+        /// <param name="foregroundColor">The foreground color the matches should be drawn in.</param>
+        /// <param name="backgroundColor">The background color the matches should be drawn in.</param>
         private void Search(String query, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
             try
             {
-                MatchCollection matches = Regex.Matches(FileContents, query);
+                MatchCollection matches = Regex.Matches(_fileContents, query);
                 int startIndex;
                 int endIndex;
                 foreach (Match m in matches)
@@ -156,15 +157,16 @@ namespace WordProcessor9000
         }
 
         /// <summary>
+        ///     Search the contents of the file.
         /// </summary>
-        /// <param name="regex"></param>
-        /// <param name="foregroundColor"></param>
-        /// <param name="backgroundColor"></param>
+        /// <param name="regex">The regular expression to search for.</param>
+        /// <param name="foregroundColor">The foreground color the matches should be drawn in.</param>
+        /// <param name="backgroundColor">The background color the matches should be drawn in.</param>
         private void Search(Regex regex, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
             try
             {
-                MatchCollection matches = regex.Matches(FileContents);
+                MatchCollection matches = regex.Matches(_fileContents);
                 int startIndex;
                 int endIndex;
                 foreach (Match m in matches)
@@ -189,7 +191,7 @@ namespace WordProcessor9000
         ///     Writes a string to the console with the specified font color.
         /// </summary>
         /// <param name="str">The string to color</param>
-        /// <param name="color">The font color</param>
+        /// <param name="color">The foreground color to use.</param>
         private static void ColoredConsoleWrite(String str, ConsoleColor color)
         {
             ConsoleColor originalColor = Console.ForegroundColor;
@@ -202,8 +204,8 @@ namespace WordProcessor9000
         ///     Writes a string to the console with the specified background / foreground colors.
         /// </summary>
         /// <param name="str">The string to color</param>
-        /// <param name="backgroundColor">The background color</param>
-        /// <param name="foregroundColor">The font color</param>
+        /// <param name="backgroundColor">The background color to use.</param>
+        /// <param name="foregroundColor">The foreground color to use.</param>
         private static void ColoredConsoleWrite(String str, ConsoleColor backgroundColor, ConsoleColor foregroundColor)
         {
             ConsoleColor originalForegroundColor = Console.ForegroundColor;
