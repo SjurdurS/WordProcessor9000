@@ -109,20 +109,33 @@ namespace WordProcessor9000
         private void Search(String query, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
             MatchCollection matches = Regex.Matches(FileContents, query);
+            int startIndex;
+            int endIndex;
             foreach (Match m in matches)
             {
-                var cs = new ColoredSubstring(m.Index, m.Index+m.Length, foregroundColor, backgroundColor);
-                this._substrings.Add(cs);
+                startIndex = m.Index;
+                endIndex = m.Index + m.Length;
+                if (endIndex > startIndex) {
+                    var cs = new ColoredSubstring(m.Index, m.Index+m.Length, foregroundColor, backgroundColor);
+                    this._substrings.Add(cs);
+                }
             }
         }
 
         private void Search(Regex regex, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
             MatchCollection matches = regex.Matches(FileContents);
+            int startIndex;
+            int endIndex;
             foreach (Match m in matches)
             {
-                var cs = new ColoredSubstring(m.Index, m.Index + m.Length, foregroundColor, backgroundColor);
-                this._substrings.Add(cs);
+                startIndex = m.Index;
+                endIndex = m.Index + m.Length;
+                if (endIndex > startIndex)
+                {
+                    var cs = new ColoredSubstring(m.Index, m.Index + m.Length, foregroundColor, backgroundColor);
+                    this._substrings.Add(cs);
+                }
             }
         }
 
