@@ -10,7 +10,7 @@ namespace WordProcessor9000
     /// <summary>
     /// This class stores compiled regexes that are regularly used.
     /// </summary>
-    class CompiledRegexes
+    public class CompiledRegexes
     {
 
         /// <summary>

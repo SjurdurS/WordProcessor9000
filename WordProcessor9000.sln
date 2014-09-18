@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordProcessor9000", "WordProcessor9000\WordProcessor9000.csproj", "{59A81145-2F13-4676-826E-2B788AB4DA18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{10B61CD5-603B-463F-B1A3-C0275643FB7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{59A81145-2F13-4676-826E-2B788AB4DA18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59A81145-2F13-4676-826E-2B788AB4DA18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59A81145-2F13-4676-826E-2B788AB4DA18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10B61CD5-603B-463F-B1A3-C0275643FB7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10B61CD5-603B-463F-B1A3-C0275643FB7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10B61CD5-603B-463F-B1A3-C0275643FB7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10B61CD5-603B-463F-B1A3-C0275643FB7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
