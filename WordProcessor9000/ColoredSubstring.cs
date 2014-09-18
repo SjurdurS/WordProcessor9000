@@ -2,6 +2,10 @@
 
 namespace WordProcessor9000
 {
+    /// <summary>
+    /// This class represents the indices of a substring of another string
+    /// and the ConsoleColors the substring should use.
+    /// </summary>
     internal class ColoredSubstring
     {
         public readonly ConsoleColor BackgroundColor;
@@ -9,6 +13,11 @@ namespace WordProcessor9000
         public readonly ConsoleColor ForegroundColor;
         public readonly int StartIndex;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startIndex"></param>
+        /// <param name="endIndex"></param>
         public ColoredSubstring(int startIndex, int endIndex)
         {
             StartIndex = startIndex;
@@ -21,6 +30,12 @@ namespace WordProcessor9000
             BackgroundColor = Console.BackgroundColor;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startIndex"></param>
+        /// <param name="endIndex"></param>
+        /// <param name="foregroundColor"></param>
         public ColoredSubstring(int startIndex, int endIndex, ConsoleColor foregroundColor)
         {
             StartIndex = startIndex;
@@ -33,6 +48,13 @@ namespace WordProcessor9000
             BackgroundColor = Console.BackgroundColor;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startIndex"></param>
+        /// <param name="endIndex"></param>
+        /// <param name="foregroundColor"></param>
+        /// <param name="backgroundColor"></param>
         public ColoredSubstring(int startIndex, int endIndex, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
             StartIndex = startIndex;
@@ -45,9 +67,12 @@ namespace WordProcessor9000
             BackgroundColor = backgroundColor;
         }
 
-        public void PrintMe()
+        /// <summary>
+        /// Write the contents of this string to the console.
+        /// </summary>
+        public override String ToString()
         {
-            Console.WriteLine(StartIndex.ToString().PadLeft(5) + ":" + EndIndex.ToString().PadLeft(5) + ":" +
+            return (StartIndex.ToString().PadLeft(5) + ":" + EndIndex.ToString().PadLeft(5) + ":" +
                               ForegroundColor.ToString().PadLeft(8) + ":" + BackgroundColor.ToString().PadLeft(8));
         }
     }

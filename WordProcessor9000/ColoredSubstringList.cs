@@ -114,7 +114,7 @@ namespace WordProcessor9000
         }
 
 
-        // The implenentation of IEnumerable is borrowed from here:
+        // The implementation of IEnumerable is borrowed from here:
         // http://stackoverflow.com/questions/13135443/how-to-make-the-class-as-an-ienumerable-in-c
         #region Implementation of IEnumerable
 
