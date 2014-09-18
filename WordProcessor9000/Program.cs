@@ -38,6 +38,8 @@ namespace WordProcessor9000
             Console.WriteLine("".PadRight(10) + "e.g. '*net' matches 'internet'");
             Console.WriteLine("".PadRight(10) + "e.g. 'fash*' matches 'fashion'");
             Console.WriteLine();
+            Console.WriteLine("The commands can be used with each other.");
+            Console.WriteLine();
             Console.WriteLine("CTRL+C to quit at any time.\n");
         }
 
