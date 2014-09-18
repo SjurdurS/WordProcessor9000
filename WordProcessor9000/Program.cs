@@ -91,11 +91,11 @@ namespace WordProcessor9000
             try
             {
                 // Words that start with the query
-                query = Regex.Replace(query, CompiledRegexes.StartsWith.ToString(), CompiledRegexes.StartsWithReplacement.ToString());
+                query = CompiledRegexes.StartsWith.Replace(query, CompiledRegexes.StartsWithReplacement.ToString());
 
 
                 // Words that end with the query
-                query = Regex.Replace(query, CompiledRegexes.EndsWith.ToString(), CompiledRegexes.EndsWithReplacement.ToString());
+                query = CompiledRegexes.EndsWith.Replace(query, CompiledRegexes.EndsWithReplacement.ToString());
 
             }
             catch (ArgumentException ex)
