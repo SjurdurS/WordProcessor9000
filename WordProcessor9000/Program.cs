@@ -37,6 +37,9 @@ namespace WordProcessor9000
             Console.WriteLine("*".PadRight(10) + "Search for words starting with or ending with a keyword:");
             Console.WriteLine("".PadRight(10) + "e.g. '*net' matches 'internet'");
             Console.WriteLine("".PadRight(10) + "e.g. 'fash*' matches 'fashion'");
+            Console.WriteLine("(?i)".PadRight(10) + "If the query starts with this expression the search is");
+            Console.WriteLine("".PadLeft(10) + "case insensitive");
+            Console.WriteLine("".PadRight(10) + "e.g. '(?i)h*+c*' matches 'Hans Christian'");
             Console.WriteLine();
             Console.WriteLine("The commands can be used with each other.");
             Console.WriteLine();
@@ -83,12 +86,19 @@ namespace WordProcessor9000
                 return;
             }
 
+
+
             // Escape the query to make sure the user cannot use other special characters
             query = Regex.Escape(query);
 
             // Unescape our available commands.
             query = Regex.Replace(query, @"\\\*", "*");
             query = Regex.Replace(query, @"\\\+", "+");
+
+            if (query.StartsWith(@"\(\?i\)")) // Unescape 'case insensitivity' special character
+            {
+                query = Regex.Replace(query, @"^\\\(\\\?i\\\)", "(?i)");
+            }
 
             try
             {
