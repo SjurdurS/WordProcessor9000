@@ -6,16 +6,13 @@ namespace WordProcessor9000
 {
     internal class Parser
     {
-        private readonly Commands _commands;
-
         public Parser()
         {
-            _commands = new Commands();
         }
 
-        public Command GetCommand()
+        public String GetUserInput()
         {
-            String inputLine = null;
+            String inputLine = "";
 
             try
             {
@@ -27,7 +24,7 @@ namespace WordProcessor9000
                 Console.WriteLine("Error occured while reading input: " + ie);
             }
 
-            return new Command(inputLine);
+            return inputLine;
         }
     }
 }

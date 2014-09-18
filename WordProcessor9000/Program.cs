@@ -56,8 +56,8 @@ namespace WordProcessor9000
             while (true)
             {
                 ResetSubstrings();
-                Command command = _parser.GetCommand();
-                ProcessCommand(command);
+                String userInput = _parser.GetUserInput();
+                ProcessUserInput(userInput);
             }
         }
 
@@ -69,9 +69,9 @@ namespace WordProcessor9000
             Search(_regexDate, ConsoleColor.Red, ConsoleColor.Black);
         }
 
-        private void ProcessCommand(Command command)
+        private void ProcessUserInput(String userInput)
         {
-            String query = command.GetCommandWord();
+            String query = userInput;
             if (query == "")
             {
                 Console.Clear();
