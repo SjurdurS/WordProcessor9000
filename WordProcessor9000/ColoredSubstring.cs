@@ -3,8 +3,8 @@
 namespace WordProcessor9000
 {
     /// <summary>
-    /// This class represents the indices of a substring of another string
-    /// and the ConsoleColors the substring should use.
+    ///     This class represents the indices of a substring of another string
+    ///     and the ConsoleColors the substring should use.
     /// </summary>
     internal class ColoredSubstring
     {
@@ -14,10 +14,10 @@ namespace WordProcessor9000
         public readonly int StartIndex;
 
         /// <summary>
-        /// 
+        ///     Instantiate a new ColoredSubstring with default foreground and background colors.
         /// </summary>
-        /// <param name="startIndex"></param>
-        /// <param name="endIndex"></param>
+        /// <param name="startIndex">Starting index of the substring</param>
+        /// <param name="endIndex">Ending index of the substring</param>
         public ColoredSubstring(int startIndex, int endIndex)
         {
             StartIndex = startIndex;
@@ -31,11 +31,11 @@ namespace WordProcessor9000
         }
 
         /// <summary>
-        /// 
+        ///     Instantiate a new ColoredSubstring with a specified foreground color and default background color.
         /// </summary>
-        /// <param name="startIndex"></param>
-        /// <param name="endIndex"></param>
-        /// <param name="foregroundColor"></param>
+        /// <param name="startIndex">Starting index of the substring</param>
+        /// <param name="endIndex">Ending index of the substring</param>
+        /// <param name="foregroundColor">The color used as foreground color</param>
         public ColoredSubstring(int startIndex, int endIndex, ConsoleColor foregroundColor)
         {
             StartIndex = startIndex;
@@ -49,12 +49,12 @@ namespace WordProcessor9000
         }
 
         /// <summary>
-        /// 
+        ///     Instantiate a new ColoredSubstring with a specified foreground and background color.
         /// </summary>
-        /// <param name="startIndex"></param>
-        /// <param name="endIndex"></param>
-        /// <param name="foregroundColor"></param>
-        /// <param name="backgroundColor"></param>
+        /// <param name="startIndex">Starting index of the substring</param>
+        /// <param name="endIndex">Ending index of the substring</param>
+        /// <param name="foregroundColor">The color used as foreground color</param>
+        /// <param name="backgroundColor">The color used as background color</param>
         public ColoredSubstring(int startIndex, int endIndex, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
             StartIndex = startIndex;
@@ -67,13 +67,10 @@ namespace WordProcessor9000
             BackgroundColor = backgroundColor;
         }
 
-        /// <summary>
-        /// Write the contents of this string to the console.
-        /// </summary>
         public override string ToString()
         {
             return (StartIndex.ToString().PadLeft(6) + ":" + EndIndex.ToString().PadLeft(6) + ":" +
-                              ForegroundColor.ToString().PadLeft(12) + ":" + BackgroundColor.ToString().PadLeft(12));
+                    ForegroundColor.ToString().PadLeft(12) + ":" + BackgroundColor.ToString().PadLeft(12));
         }
     }
 }

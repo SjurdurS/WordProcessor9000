@@ -4,14 +4,58 @@ using System.Collections.Generic;
 
 namespace WordProcessor9000
 {
+    /// <summary>
+    /// This class represents a sorted list of colored substrings that represent indices of another string.
+    /// The ColoredSubstringList is used to easily color a string at various indices with different colors.
+    /// The last added ColoredSubstring has highest precedence and overrules all previous inserted 
+    /// ColoredSubstrings.
+    /// 
+    /// The algorithm for the Add method works as follows:
+    ///     Each substring contains the values [x y C1 C2] where x is start index, 
+    ///     y is end index, C1 is foreground color and C2 is background color.
+    /// 
+    /// 1.  If the substring has equal indices as another substring overwrite that substring.
+    /// 
+    /// 2.  If substring A is inside substring B split substring B around substring A.
+    ///     Example_1:
+    /// 
+    ///             Contents before adding
+    ///         [ 0  100  C1  C2] - substring B
+    /// 
+    ///             insert substring A [20 40 C3 C4]
+    /// 
+    ///             Contents after adding
+    ///         [ 0   20  C1  C2] - substring Bsplit1
+    ///         [20   40  C3  C4] - substring A
+    ///         [40  100  C1  C2] - substring Bsplit2
+    /// 
+    /// 3.  If substring A starts inside substring B and ends in another substring D 
+    ///     remove all substrings {C...Cn} between B and D and modify indices on 
+    ///     substring B and D according to substring A.
+    ///     Example_1:
+    /// 
+    ///             Contents before adding
+    ///         [  0   10  C1  C2] - substring B
+    ///         [ 10  100  C3  C4] - substring C1
+    ///         [100  150  C1  C2] - substring C2
+    ///         [150  250  C3  C4] - substring C3
+    ///         [250  400  C5  C6] - substring D
+    /// 
+    ///             insert substring A [5 300 C7 C8]
+    /// 
+    ///             Contents after adding
+    ///         [  0    5  C1  C2] - substring B'
+    ///         [  5  300  C7  C8] - substring A
+    ///         [300  400  C5  C6] - substring D'
+    /// </summary>
     internal class ColoredSubstringList : IEnumerable<ColoredSubstring>
     {
         private readonly List<ColoredSubstring> _substrings;
 
         /// <summary>
-        /// Instantiate the SubstringList.
+        ///     Instantiate the SubstringList.
         /// </summary>
-        /// <param name="cs">This is the main string to split.</param>
+        /// <param name="cs">The main string you want to split.</param>
         public ColoredSubstringList(ColoredSubstring cs)
         {
             _substrings = new List<ColoredSubstring>();
@@ -19,9 +63,9 @@ namespace WordProcessor9000
         }
 
         /// <summary>
-        /// 
+        ///     Add a new ColoredSubstring to the list of substrings.  
         /// </summary>
-        /// <param name="newCs"></param>
+        /// <param name="newCs">The ColoredSubstring to insert into the list of substrings</param>
         public void Add(ColoredSubstring newCs)
         {
             int startIndexNew = newCs.StartIndex;
