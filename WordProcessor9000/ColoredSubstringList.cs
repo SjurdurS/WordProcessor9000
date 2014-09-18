@@ -53,9 +53,10 @@ namespace WordProcessor9000
         private readonly List<ColoredSubstring> _substrings;
 
         /// <summary>
-        ///     Instantiate the SubstringList.
+        ///     Instantiate the SubstringList. Always instantiate the list with the full string.
+        ///     In our case instantiate the list with the contents of the imported text document.
         /// </summary>
-        /// <param name="cs">The main string you want to split.</param>
+        /// <param name="cs">The full string you want to split into various substrings.</param>
         public ColoredSubstringList(ColoredSubstring cs)
         {
             _substrings = new List<ColoredSubstring>();
@@ -78,7 +79,7 @@ namespace WordProcessor9000
             {
                 ColoredSubstring cs = _substrings[i];
 
-                // Case 1.a start index is equal another. 
+                // Case 1.a start index is equal another start index. 
                 if (startIndexNew == cs.StartIndex)
                 {
                     if (endIndexNew < cs.EndIndex)
@@ -86,14 +87,14 @@ namespace WordProcessor9000
                         _substrings[i] = new ColoredSubstring(endIndexNew, cs.EndIndex, cs.ForegroundColor,
                             cs.BackgroundColor);
                         _substrings.Insert(i, newCs);
-                    } // Replace substring if end indices are equal
-                    else if (endIndexNew == cs.EndIndex)
+                    }
+                    else if (endIndexNew == cs.EndIndex) // Replace substring if end indices are equal
                     {
                         _substrings[i] = newCs;
                     }
-                    else
+                    else // endIndexNew > cs.EndIndex
                     {
-                        // endIndexNew > cs.EndIndex
+                        
                         for (j = i + 1; j < _substrings.Count; j++)
                         {
                             ColoredSubstring cs2 = _substrings[j];
@@ -115,7 +116,7 @@ namespace WordProcessor9000
                             j--;
                         }
                     }
-                } // Case 1.b Start is inside another.
+                } // Case 1.b Start is inside a substring.
                 else if (startIndexNew > cs.StartIndex && startIndexNew <= cs.EndIndex)
                 {
                     if (endIndexNew <= cs.EndIndex)
@@ -132,7 +133,7 @@ namespace WordProcessor9000
                     }
                     else
                     {
-                        // if endIndexNew > cs.EndIndex
+                        // if endIndexNew > cs.EndIndex .. Start is inside one substring but End is inside another substring.
                         for (j = i + 1; j < _substrings.Count; j++)
                         {
                             ColoredSubstring cs2 = _substrings[j];
@@ -145,7 +146,7 @@ namespace WordProcessor9000
                                     cs2.ForegroundColor, cs2.BackgroundColor);
                                 break;
                             }
-                            _substrings.RemoveAt(j);
+                            _substrings.RemoveAt(j); // Remove substrings that are between the two start and end substrings.
                             j--;
                         }
                     }
