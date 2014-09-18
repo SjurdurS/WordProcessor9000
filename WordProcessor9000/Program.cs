@@ -56,26 +56,47 @@ namespace WordProcessor9000
 
             while (true)
             {
+                ResetSubstrings();
                 Command command = _parser.GetCommand();
                 ProcessCommand(command);
             }
         }
 
-        private void ProcessCommand(Command command)
+        private void ResetSubstrings()
         {
             this._substrings = new ColoredSubstringList(new ColoredSubstring(0, FileContents.Length)); // Reset the colored substring list
             Search(_regexUrl, ConsoleColor.Blue, ConsoleColor.Black);
             Search(_regexDate, ConsoleColor.Red, ConsoleColor.Black);
+        }
 
+        private void ProcessCommand(Command command)
+        {
             String query = command.GetCommandWord();
+            if (query == "")
+            {
+                Console.Clear();
+                ColorPrint();
+            }
+            else if (query.Contains("+") && query.Length > 1)
+            {
+                query = query.Replace("+", @"\s");
+            }
+            else if (Regex.Match(query, @"\w\*\b").Success)
+            {
+                Console.WriteLine("FOund you");
+                query = query.Replace("*", @"");
+            }
+            else
+            {
+                query = Regex.Escape(query);
+            }
+
+
             Search(query, ConsoleColor.Black, ConsoleColor.Yellow);
-            
-            Console.ResetColor();
+
+
             Console.Clear();
-
             ColorPrint();
-
-            Console.ResetColor();
         }
 
         private void ColorPrint()
@@ -95,7 +116,7 @@ namespace WordProcessor9000
         /// <param name="backgroundColor"></param>
         private void Search(String query, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
-            MatchCollection matches = Regex.Matches(FileContents, Regex.Escape(query));
+            MatchCollection matches = Regex.Matches(FileContents, query);
             int startIndex;
             int endIndex;
             foreach (Match m in matches)
