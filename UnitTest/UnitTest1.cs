@@ -41,5 +41,23 @@ namespace UnitTest
             Assert.IsTrue(CompiledRegexes.Date.Match(date4).Success);
 
         }
+
+        [TestMethod]
+        public void TestStartsWith()
+        {
+            String sw1 = "net*";
+            String sw2 = "test net*";
+            Assert.IsTrue(CompiledRegexes.StartsWith.Match(sw1).Success);
+            Assert.IsTrue(CompiledRegexes.StartsWith.Match(sw2).Success);
+        }
+        
+        [TestMethod]
+        public void TestEndsWith()
+        {
+            String ew1 = "*net";
+            String ew2 = "test *net";
+            Assert.IsTrue(CompiledRegexes.EndsWith.Match(ew1).Success);
+            Assert.IsTrue(CompiledRegexes.EndsWith.Match(ew2).Success);
+        }
     }
 }
