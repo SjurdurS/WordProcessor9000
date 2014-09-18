@@ -4,19 +4,20 @@ using WordProcessor9000.Properties;
 
 namespace WordProcessor9000
 {
+
     internal class Parser
     {
-        public Parser()
-        {
-        }
-
+        /// <summary>
+        /// Get the user input from the Console.
+        /// </summary>
+        /// <returns>Returns the input by from the Console.</returns>
         public String GetUserInput()
         {
             String inputLine = "";
 
             try
             {
-                Console.Write("> ");
+                Console.Write("> "); // InputMessage
                 inputLine = Console.ReadLine();
             }
             catch (IOException ie)

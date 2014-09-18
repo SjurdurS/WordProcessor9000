@@ -8,19 +8,19 @@ namespace WordProcessor9000
         private readonly Parser _parser;
         public String FileContents;
 
-        private Regex _regexDate;
-        private Regex _regexEndsWith;
-        private Regex _regexStartsWith;
-        private Regex _regexUrl;
-
+        /// <summary>
+        /// List containing indices over substrings in the FileContents string and what color each should be drawn with.
+        /// </summary>
         private ColoredSubstringList _substrings;
 
-
+        /// <summary>
+        /// Instantiate the program.
+        /// </summary>
+        /// <param name="filepath"></param>
         public Program(String filepath)
         {
             _parser = new Parser();
             FileContents = TextFileReader.ReadFile(filepath);
-            InitializeRegexes();
 
             _substrings = new ColoredSubstringList(new ColoredSubstring(0, FileContents.Length));
             Start();
@@ -49,8 +49,8 @@ namespace WordProcessor9000
             Console.ReadKey();
             Console.Clear();
 
-            Search(_regexUrl, ConsoleColor.Blue, ConsoleColor.Black);
-            Search(_regexDate, ConsoleColor.Red, ConsoleColor.Black);
+            Search(CompiledRegexes.URL, ConsoleColor.Blue, ConsoleColor.Black);
+            Search(CompiledRegexes.Date, ConsoleColor.Red, ConsoleColor.Black);
             ColorPrint();
 
             while (true)
@@ -65,9 +65,11 @@ namespace WordProcessor9000
         {
             _substrings = new ColoredSubstringList(new ColoredSubstring(0, FileContents.Length));
                 // Reset the colored substring list
-            Search(_regexUrl, ConsoleColor.Blue, ConsoleColor.Black);
-            Search(_regexDate, ConsoleColor.Red, ConsoleColor.Black);
+            Search(CompiledRegexes.URL, ConsoleColor.Blue, ConsoleColor.Black);
+            Search(CompiledRegexes.Date, ConsoleColor.Red, ConsoleColor.Black);
         }
+
+
 
         private void ProcessUserInput(String userInput)
         {
@@ -76,16 +78,30 @@ namespace WordProcessor9000
             {
                 Console.Clear();
                 ColorPrint();
+                return;
             }
 
-            // Words that start with the query
-            string subStart = @"\b$1\w*\b";
-            query = Regex.Replace(query, _regexStartsWith.ToString(), subStart);
-            
+            // Escape the query to make sure the user cannot use other special characters
+            query = Regex.Escape(query);
 
-            // Words that end with the query
-            string subEnd = @"\b\w*$1\b";
-            query = Regex.Replace(query, _regexEndsWith.ToString(), subEnd);
+            // Unescape our available commands.
+            query = Regex.Replace(query, @"\\\*", "*");
+            query = Regex.Replace(query, @"\\\+", "+");
+
+            try
+            {
+                // Words that start with the query
+                query = Regex.Replace(query, CompiledRegexes.StartsWith.ToString(), CompiledRegexes.StartsWithReplacement.ToString());
+
+
+                // Words that end with the query
+                query = Regex.Replace(query, CompiledRegexes.EndsWith.ToString(), CompiledRegexes.EndsWithReplacement.ToString());
+
+            }
+            catch (ArgumentException ex)
+            {
+                // Do nothing
+            }
 
             if (query.Contains("+") && query.Length > 1)
             {
@@ -195,35 +211,6 @@ namespace WordProcessor9000
             Console.Write(str);
             Console.BackgroundColor = originalBackgroundColor;
             Console.ForegroundColor = originalForegroundColor;
-        }
-
-        private void InitializeRegexes()
-        {
-            // This regex matches the format of the dates in the given example text file:
-            // "DDD, dd MMM(M) YYYY" 
-            // Where:
-            //  DDD is the three letter abbreviation of the days name
-            //  dd is one or two digit date
-            //  MMM(M) is the abbreviation of the Month
-            //  YYYY is either 1xxx or 2xxx.
-            _regexDate =
-                new Regex(
-                    @"(?i:mon|tue|wed|thu|fri|sat|sun),\s\d\d?\s(?i:jan|feb|mar|apr|may|june|july|aug|sept|oct|nov|dec)\s(?:[12]\d{3})");
-
-
-            // This regex matches all urls of form:
-            //  http(s) or ftp :// address
-            // High ASCII characters are also supported. Live example is "www.strøm.dk".
-            // Example:
-            //  http://www.feeds.reuters.com/~r/reuters/topNews/~3/ptoAzETqy3w/us-usa-neilarmstrong-idUSBRE87O0B020120825
-            // Allowed characters found here: http://tools.ietf.org/html/rfc3986#appendix-A
-            _regexUrl =
-                new Regex(
-                    @"(?i:https?|ftp)://(?i:[\w+?\.\w+])+(?i:[\w\~\!\@\#\$%\^\&\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?");
-
-
-            _regexStartsWith = new Regex(@"(\b\w*)\*");
-            _regexEndsWith = new Regex(@"\*(\w*\b)");
         }
 
 

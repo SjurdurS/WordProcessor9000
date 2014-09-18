@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ColoredSubstringList.cs" />
     <Compile Include="ColoredSubstring.cs" />
+    <Compile Include="CompiledRegexes.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
