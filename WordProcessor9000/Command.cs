@@ -15,7 +15,7 @@ namespace WordProcessor9000
             this._commandWord = commandWord;
         }
 
-        public String getCommandWord()
+        public String GetCommandWord()
         {
             return _commandWord;
         }

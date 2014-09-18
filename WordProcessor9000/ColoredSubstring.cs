@@ -70,10 +70,10 @@ namespace WordProcessor9000
         /// <summary>
         /// Write the contents of this string to the console.
         /// </summary>
-        public override String ToString()
+        public override string ToString()
         {
-            return (StartIndex.ToString().PadLeft(5) + ":" + EndIndex.ToString().PadLeft(5) + ":" +
-                              ForegroundColor.ToString().PadLeft(8) + ":" + BackgroundColor.ToString().PadLeft(8));
+            return (StartIndex.ToString().PadLeft(6) + ":" + EndIndex.ToString().PadLeft(6) + ":" +
+                              ForegroundColor.ToString().PadLeft(12) + ":" + BackgroundColor.ToString().PadLeft(12));
         }
     }
 }

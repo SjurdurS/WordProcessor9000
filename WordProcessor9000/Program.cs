@@ -32,7 +32,7 @@ namespace WordProcessor9000
             Console.Clear();
             Console.WriteLine("Welcome to WordProcessor9000\n");
             Console.WriteLine("This software allows you to search for and highlight words in a given text.");
-            Console.WriteLine("Available functionality:");
+            Console.WriteLine("Available commands:");
             Console.WriteLine("+".PadRight(10) + "Two adjacent keywords are followed one after the other:");
             Console.WriteLine("".PadRight(10) + "e.g. 'text + file' matches 'text file'.");
             Console.WriteLine("*".PadRight(10) + "Search for words starting with or ending with a keyword:");
@@ -47,7 +47,7 @@ namespace WordProcessor9000
             PrintWelcome();
 
             Console.WriteLine("Press any key to begin.");
-            WaitForAnyKey();
+            Console.ReadKey();
             Console.Clear();
 
             Search(_regexUrl, ConsoleColor.Blue, ConsoleColor.Black);
@@ -61,34 +61,15 @@ namespace WordProcessor9000
             }
         }
 
-        private void WaitForAnyKey()
-        {
-            ConsoleKeyInfo cki;
-            while (true)
-            {
-                // Wait for any key press
-                cki = Console.ReadKey();
-                break;
-            }
-        }
-
-        private void PrintFile()
-        {
-            Console.WriteLine(FileContents);
-        }
-
         private void ProcessCommand(Command command)
         {
             this._substrings = new ColoredSubstringList(new ColoredSubstring(0, FileContents.Length)); // Reset the colored substring list
-
-            String query = command.getCommandWord();
-
-            
             Search(_regexUrl, ConsoleColor.Blue, ConsoleColor.Black);
             Search(_regexDate, ConsoleColor.Red, ConsoleColor.Black);
 
+            String query = command.GetCommandWord();
             Search(query, ConsoleColor.Black, ConsoleColor.Yellow);
-
+            
             Console.ResetColor();
             Console.Clear();
 
@@ -106,9 +87,15 @@ namespace WordProcessor9000
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="foregroundColor"></param>
+        /// <param name="backgroundColor"></param>
         private void Search(String query, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
-            MatchCollection matches = Regex.Matches(FileContents, query);
+            MatchCollection matches = Regex.Matches(FileContents, Regex.Escape(query));
             int startIndex;
             int endIndex;
             foreach (Match m in matches)
@@ -122,6 +109,12 @@ namespace WordProcessor9000
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="regex"></param>
+        /// <param name="foregroundColor"></param>
+        /// <param name="backgroundColor"></param>
         private void Search(Regex regex, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
         {
             MatchCollection matches = regex.Matches(FileContents);

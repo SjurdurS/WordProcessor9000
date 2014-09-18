@@ -8,12 +8,20 @@ namespace WordProcessor9000
     {
         private readonly List<ColoredSubstring> _substrings;
 
+        /// <summary>
+        /// Instantiate the SubstringList.
+        /// </summary>
+        /// <param name="cs">This is the main string to split.</param>
         public ColoredSubstringList(ColoredSubstring cs)
         {
             _substrings = new List<ColoredSubstring>();
             _substrings.Add(cs);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="newCs"></param>
         public void Add(ColoredSubstring newCs)
         {
             int startIndexNew = newCs.StartIndex;
@@ -101,16 +109,17 @@ namespace WordProcessor9000
             }
         }
 
-        public void PrintArray()
+        /// <summary>
+        /// Write the contents of the list to the console.
+        /// </summary>
+        public void Print()
         {
-            Console.WriteLine("");
-            Console.WriteLine("---------- Print ------------");
+            Console.WriteLine("------------- Substrings --------------");
             foreach (ColoredSubstring cs in _substrings)
             {
-                cs.PrintMe();
+                Console.WriteLine(cs);
             }
-
-            Console.WriteLine("-----------------------------");
+            Console.WriteLine("---------------------------------------");
         }
 
 
