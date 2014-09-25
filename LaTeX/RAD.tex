@@ -5,13 +5,13 @@
 \part*{Requirements Analysis Document}
 
 
-\chapter*{Introduction}
+%\chapter*{Introduction}
 
-\section*{Purpose of the system}
+%\section*{Purpose of the system}
 
-\section*{Scope of the system}
+%\section*{Scope of the system}
 
-\section*{Objectives and success criteria of the project}
+%\section*{Objectives and success criteria of the project}
 
 
 %\section*{Definitions, acronyms, and abbreviations}
@@ -126,7 +126,6 @@ Peter synchronizes his calendar system with the server and all his calendars are
 
 \subsubsection{Use case diagrams}
 
-//Billede
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=160mm]{usecase.png}
@@ -230,13 +229,125 @@ Peter synchronizes his calendar system with the server and all his calendars are
 \end{usecase}
 
 
+\newpage
+\subsection*{Analysis Object Model}
+\subsubsection{Identifying entity, boundary, and control objects}
 
-%\subsection*{Object model}
+\begin{tabular}{|l|p{5.3cm}|p{5.3cm}|}
+\hline
+\multicolumn{3}{|c|}{Identifying Entity Objects} \\
+\hline
+\textbf{Entity Object} & \textbf{Attributes \& Associations} & \textbf{Definitions} \\
+\hline
+ Client & 
+\begin{itemize}
+     \item UserName
+\end{itemize} &
+The actor of the system. He administrates the Calendars and Events in the system. \\ \hline
+Calendar & 
+\begin{itemize}
+	\item Name
+	\item SharedGroup
+	\item Color
+  \end{itemize} & 
+A Calendar is a system used to keep track of events, e.g. Work calendar or Holiday calendar. The Calendar contains events specific to only itself. The system can contain multiple calendars.\\ \hline
+Event &
+\begin{itemize}
+	\item Name
+	\item SharedGroup
+	\item Color
+	\item StartDateTime
+	\item EndDateTime
+	\item Alarm
+	\item Place
+	\item Description
+\end{itemize} &
+An Event is an event belonging to only one Calendar. Events are used to set alarms or reminders. \\ \hline
+OtherUser & 
+\begin{itemize} 
+	\item UserName 
+\end{itemize} & 
+The actor who receives invitations. He has rights to the other client’s calendar. \\ \hline
+Alarm &
+\begin{itemize} 
+	\item Type
+\end{itemize} &
+Alarm notify the client within a given amount of time before the event start.  \\ \hline
+\end{tabular}
 
-%\subsection*{Dynamic model}
+\newpage
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{Boundary Object} & \textbf{Definition} \\ \hline
+CalendarForm & Form used by \textbf{CLIENT} to specify the properties of a \textbf{calendar} during creation or editing. \\ \hline
+EventForm & Form used by \textbf{CLIENT} to specify the properties of an \textbf{event} during creation or editing. \\ \hline
+ShareForm & Form used by \textbf{CLIENT} to specify the users that the client would like to share his calendar or event with. \\ \hline
+InviteNotice & Notice received by \textbf{users} who have been invited to see an \textbf{event} or \textbf{calendar}. \\ \hline
+InviteReply & Notice received by \textbf{CLIENT} that informs whether the user has accepted or declined the invite.   \\ \hline
+SynchronizedNotice & Notice provided by the \textbf{SERVER} when the \textbf{CLIENT} asked for synchronizing whenever it succeed or fail.  \\ \hline
+\end{tabular}
+
+
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{Control Object} & \textbf{Definition} \\ \hline
+CalendarControl & 
+Manages the reporting function for whenever a \textbf{calendar} is created, edited og removed. 
+When a \textbf{calendar} is created, edited or removed the CalendarControl creates a CalendarForm and present it to the \textbf{CLIENT}. It then creates a ShareForm and present it to the \textbf{CLIENT}. It submits the forms and then waits for the \textbf{SERVER} to automatically update( or if the \textbf{CLIENT} synchronizes). The UpdateControl takes over from here. \\ \hline
+EventControl & 
+Manages the reporting function for whenever an \textbf{event} is created, edited, or removed. 
+When an \textbf{event} is created, edited or removed the EventControl creates a EventForm and present it to the \textbf{CLIENT}. It then creates a ShareForm and present it to the \textbf{CLIENT}. It submits the forms and then waits for the \textbf{SERVER} to automatically update( or if the \textbf{CLIENT} synchronizes). The UpdateControl takes over from here. \\ \hline
+UpdateControl & 
+Manages updates and synchronizations. When a form is submitted the UpdateControl takes over. It waits for the \textbf{SERVER} to automatically update or if the user manually synchronizes. 
+When the \textbf{SERVER} updates the \textbf{calendar} the UpdateControl creates a SynchronizedNotice and displays it to the \textbf{CLIENT}. \\ \hline
+NotifyUserControl & 
+Manages invitation notices and replies. 
+If a \textbf{calendar} or \textbf{event} is shared the NotifyUserControl creates an InviteNotice when the system updates. It sends the InviteNotice and creates a InviteReply and waits for the \textbf{OtherUser}’s reply. When the \textbf{OtherUser} give a reply it is displayed to the \textbf{CLIENT}. \\ \hline
+\end{tabular}
+
+\newpage
+\paragraph{Association Class Diagram}
+This diagram is described in the Control Object Table. It illustrates the association between Entity objects, Boundary objects and Control Objects.
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=160mm]{diagram.png}
+\caption{Association Class Diagram \label{overflow}}
+\end{figure}
+
+\newpage
+\subsubsection*{Class model}
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=160mm]{class.png}
+\caption{UML Class Diagram \label{overflow}}
+\end{figure}
+
+\subsection*{Dynamic model}
+
+\subsubsection*{Sequence Diagram}
+
+\newpage
+\subsubsection*{State Machine Diagram}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=160mm]{calendar.png}
+\caption{State Machine Calendar Object  \label{overflow}}
+\end{figure}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=160mm]{event.png}
+\caption{State Machine Event Object \label{overflow}}
+\end{figure}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=160mm]{view.png}
+\caption{State Machine View Object  \label{overflow}}
+\end{figure}
 
 %\subsection*{User interface - navigational paths and screen mock-ups}
-
 
 %\chapter*{Glossary}
 
